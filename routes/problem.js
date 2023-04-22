@@ -36,28 +36,39 @@ const problems = [
  * Get list of problems
  */
 router.get("/", (req, res, next) => {
+  console.log("GET /");
+
+  // Assess filter in URL
   const decisionId = req.query.decisionId;
   // console.log(`Query parameter: ${JSON.stringify(req.query, 0, 2)}`);
   console.log(`Query parameter decisionId: ${decisionId}`);
+  let filterForDecisionId = {};
+  if (decisionId) {
+    // Compose filter for decision id
+    filterForDecisionId = { decisionId: decisionId };
+  }
+  console.log(" filter: " + JSON.stringify(filterForDecisionId));
 
   // Request all problems from database
   const problems = [];
   db.getDb()
     .db()
     .collection("problems")
-    .find()
+    .find(filterForDecisionId)
     .forEach((problemDoc) => {
       problems.push(problemDoc);
     })
     .then((result) => {
+      // .then((result) => {
       // Return problems data retrieved from database
+      console.log("Problems retrieved from DB:");
       console.log(problems);
       res.status(200).json(problems);
     })
     .catch((err) => {
       // Encountered error retrieve problems. Responding to caller with server problem error code
       console.log(err);
-      res.status(500).json({ message: "An error occurred." });
+      res.status(500).json({ message: "An error occurred getting problems" });
     });
 });
 
@@ -125,6 +136,11 @@ router.get("/:id", (req, res, next) => {
  *
  */
 router.post("", (req, res, next) => {
+  // Ensure that fields are proper
+  if (!req.body.decisionId) {
+    res.status(400).json({ message: "decisionId not provided" });
+  }
+
   // Creating object to be used to create problem in database
   console.log(req.body);
   const newProblem = {

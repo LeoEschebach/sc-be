@@ -8,6 +8,7 @@ const problemRoutes = require("./routes/problem");
 const objectiveRoutes = require("./routes/objective");
 const riskRoutes = require("./routes/risk");
 const alternativeRoutes = require("./routes/alternative");
+const consequenceRoutes = require("./routes/consequence");
 // const authRoutes = require("./routes/auth");
 const db = require("./db");
 
@@ -32,6 +33,7 @@ app.use("/api/problem", problemRoutes);
 app.use("/api/objective", objectiveRoutes);
 app.use("/api/risk", riskRoutes);
 app.use("/api/alternative", alternativeRoutes);
+app.use("/api/consequence", consequenceRoutes);
 // app.use("/", authRoutes);
 
 db.initDb((err, db) => {

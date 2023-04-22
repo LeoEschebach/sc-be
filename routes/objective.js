@@ -35,30 +35,40 @@ const objectives = [
  * Get list of objectives
  */
 router.get("/", (req, res, next) => {
+  // Assess filter in URL
   console.log("GET /");
+  const decisionId = req.query.decisionId;
+  console.log(`Query parameter decisionId: ${decisionId}`);
+  let filterForDecisionId = {};
+  if (decisionId) {
+    // Compose filter for decision id
+    filterForDecisionId = { decisionId: decisionId };
+  }
+  console.log(" filter: " + JSON.stringify(filterForDecisionId));
 
   // syntaxHighlight(req);
-  const decisionId = req.query.decisionId;
-  console.log(`Get objectives for decisionId: ${decisionId}`);
+  // const decisionId = req.query.decisionId;
+  // console.log(`Get objectives for decisionId: ${decisionId}`);
 
   // Request all objectives from database
   const objectives = [];
   db.getDb()
     .db()
     .collection("objectives")
-    .find()
+    .find(filterForDecisionId)
     .forEach((objectiveDoc) => {
       objectives.push(objectiveDoc);
     })
     .then((result) => {
       // Return objectives data retrieved from database
+      console.log("Objectives retrieved from DB:");
       console.log(objectives);
       res.status(200).json(objectives);
     })
     .catch((err) => {
       // Encountered error retrieve objectives. Responding to caller with server objective error code
       console.log(err);
-      res.status(500).json({ message: "An error occurred." });
+      res.status(500).json({ message: "An error occurred getting objectives" });
     });
 });
 
@@ -90,6 +100,11 @@ router.get("/:id", (req, res, next) => {
  *
  */
 router.post("", (req, res, next) => {
+  // Ensure that fields are proper
+  if (!req.body.decisionId) {
+    res.status(400).json({ message: "decisionId not provided" });
+  }
+
   // Creating object to be used to create objective in database
   console.log(req.body);
   const newObjective = {

@@ -7,19 +7,28 @@ const ObjectId = mongodb.ObjectId;
 
 const router = Router();
 
-
-
 /**
  * Get list of alternatives
  */
 router.get("/", (req, res, next) => {
+  // Assess filter in URL
+  console.log("GET /");
+  const decisionId = req.query.decisionId;
+  console.log(`Query parameter decisionId: ${decisionId}`);
+  let filterForDecisionId = {};
+  if (decisionId) {
+    // Compose filter for decision id
+    filterForDecisionId = { decisionId: decisionId };
+  }
+  console.log(" filter: " + JSON.stringify(filterForDecisionId));
+
   // Request all alternatives from database
   console.log("Get alternatives");
   const alternatives = [];
   db.getDb()
     .db()
     .collection("alternatives")
-    .find()
+    .find(filterForDecisionId)
     .forEach((alternativeDoc) => {
       alternatives.push(alternativeDoc);
     })
@@ -63,11 +72,17 @@ router.get("/:id", (req, res, next) => {
  *
  */
 router.post("", (req, res, next) => {
+  // Ensure that fields are proper
+  if (!req.body.decisionId) {
+    res.status(400).json({ message: "decisionId not provided" });
+  }
+
   // Creating object to be used to create alternative in database
   console.log(req.body);
   const newAlternative = {
     title: req.body.title,
     description: req.body.description,
+    decisionId: req.body.decisionId,
     createdAt: new Date(),
   };
   console.log(newAlternative);

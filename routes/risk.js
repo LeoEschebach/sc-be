@@ -104,37 +104,37 @@ router.post("", (req, res, next) => {
   // Ensure that fields are proper
   if (!req.body.decisionId) {
     res.status(400).json({ message: "decisionId not provided" });
+  } else {
+    // Creating object to be used to create risk in database
+    console.log(req.body);
+    const newRisk = {
+      title: req.body.title,
+      description: req.body.description,
+      impact: req.body.impact,
+      probability: req.body.probability,
+      decisionId: req.body.decisionId,
+      createdAt: new Date(),
+    };
+    console.log(newRisk);
+
+    // Send request to database to get risk document created in database
+    db.getDb()
+      .db()
+      .collection("risks")
+      .insertOne(newRisk)
+      .then((result) => {
+        // Successfully created risk in database. Respond to caller with success message and risk Id.
+        console.log(result);
+        res
+          .status(201)
+          .json({ message: "Risk added", riskId: result.insertedId });
+      })
+      .catch((err) => {
+        // Encountered error creating a risk. Responding to caller with server risk error code.
+        console.log(err);
+        res.status(500).json({ message: "An error occurred." });
+      });
   }
-
-  // Creating object to be used to create risk in database
-  console.log(req.body);
-  const newRisk = {
-    title: req.body.title,
-    description: req.body.description,
-    impact: req.body.impact,
-    probability: req.body.probability,
-    decisionId: req.body.decisionId,
-    createdAt: new Date(),
-  };
-  console.log(newRisk);
-
-  // Send request to database to get risk document created in database
-  db.getDb()
-    .db()
-    .collection("risks")
-    .insertOne(newRisk)
-    .then((result) => {
-      // Successfully created risk in database. Respond to caller with success message and risk Id.
-      console.log(result);
-      res
-        .status(201)
-        .json({ message: "Risk added", riskId: result.insertedId });
-    })
-    .catch((err) => {
-      // Encountered error creating a risk. Responding to caller with server risk error code.
-      console.log(err);
-      res.status(500).json({ message: "An error occurred." });
-    });
 });
 
 /**

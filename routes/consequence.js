@@ -75,36 +75,36 @@ router.post("", (req, res, next) => {
   // Ensure that fields are proper
   if (!req.body.decisionId) {
     res.status(400).json({ message: "decisionId not provided" });
-  }
+  } else {
+    // Creating object to be used to create competence in database
+    console.log(req.body);
+    const newcompetence = {
+      title: req.body.title,
+      description: req.body.description,
+      decisionId: req.body.decisionId,
+      createdAt: new Date(),
+    };
+    console.log(newcompetence);
 
-  // Creating object to be used to create competence in database
-  console.log(req.body);
-  const newcompetence = {
-    title: req.body.title,
-    description: req.body.description,
-    decisionId: req.body.decisionId,
-    createdAt: new Date(),
-  };
-  console.log(newcompetence);
-
-  // Send request to database to get competence document created in database
-  db.getDb()
-    .db()
-    .collection("competences")
-    .insertOne(newcompetence)
-    .then((result) => {
-      // Successfully created competence in database. Respond to caller with success message and competence Id.
-      console.log(result);
-      res.status(201).json({
-        message: "Competence added",
-        competenceId: result.insertedId,
+    // Send request to database to get competence document created in database
+    db.getDb()
+      .db()
+      .collection("competences")
+      .insertOne(newcompetence)
+      .then((result) => {
+        // Successfully created competence in database. Respond to caller with success message and competence Id.
+        console.log(result);
+        res.status(201).json({
+          message: "Competence added",
+          competenceId: result.insertedId,
+        });
+      })
+      .catch((err) => {
+        // Encountered error creating a competence. Responding to caller with server competence error code.
+        console.log(err);
+        res.status(500).json({ message: "An error occurred." });
       });
-    })
-    .catch((err) => {
-      // Encountered error creating a competence. Responding to caller with server competence error code.
-      console.log(err);
-      res.status(500).json({ message: "An error occurred." });
-    });
+  }
 });
 
 /**

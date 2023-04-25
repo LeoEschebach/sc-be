@@ -139,35 +139,35 @@ router.post("", (req, res, next) => {
   // Ensure that fields are proper
   if (!req.body.decisionId) {
     res.status(400).json({ message: "decisionId not provided" });
+  } else {
+    // Creating object to be used to create problem in database
+    console.log(req.body);
+    const newProblem = {
+      title: req.body.title,
+      description: req.body.description,
+      decisionId: req.body.decisionId,
+      createdAt: new Date(),
+    };
+    console.log(newProblem);
+
+    // Send request to database to get problem document created in database
+    db.getDb()
+      .db()
+      .collection("problems")
+      .insertOne(newProblem)
+      .then((result) => {
+        // Successfully created problem in database. Respond to caller with success message and problem Id.
+        console.log(result);
+        res
+          .status(201)
+          .json({ message: "Problem added", problemId: result.insertedId });
+      })
+      .catch((err) => {
+        // Encountered error creating a problem. Responding to caller with server problem error code.
+        console.log(err);
+        res.status(500).json({ message: "An error occurred." });
+      });
   }
-
-  // Creating object to be used to create problem in database
-  console.log(req.body);
-  const newProblem = {
-    title: req.body.title,
-    description: req.body.description,
-    decisionId: req.body.decisionId,
-    createdAt: new Date(),
-  };
-  console.log(newProblem);
-
-  // Send request to database to get problem document created in database
-  db.getDb()
-    .db()
-    .collection("problems")
-    .insertOne(newProblem)
-    .then((result) => {
-      // Successfully created problem in database. Respond to caller with success message and problem Id.
-      console.log(result);
-      res
-        .status(201)
-        .json({ message: "Problem added", problemId: result.insertedId });
-    })
-    .catch((err) => {
-      // Encountered error creating a problem. Responding to caller with server problem error code.
-      console.log(err);
-      res.status(500).json({ message: "An error occurred." });
-    });
 });
 
 /**

@@ -75,36 +75,36 @@ router.post("", (req, res, next) => {
   // Ensure that fields are proper
   if (!req.body.decisionId) {
     res.status(400).json({ message: "decisionId not provided" });
-  }
+  } else {
+    // Creating object to be used to create alternative in database
+    console.log(req.body);
+    const newAlternative = {
+      title: req.body.title,
+      description: req.body.description,
+      decisionId: req.body.decisionId,
+      createdAt: new Date(),
+    };
+    console.log(newAlternative);
 
-  // Creating object to be used to create alternative in database
-  console.log(req.body);
-  const newAlternative = {
-    title: req.body.title,
-    description: req.body.description,
-    decisionId: req.body.decisionId,
-    createdAt: new Date(),
-  };
-  console.log(newAlternative);
-
-  // Send request to database to get alternative document created in database
-  db.getDb()
-    .db()
-    .collection("alternatives")
-    .insertOne(newAlternative)
-    .then((result) => {
-      // Successfully created alternative in database. Respond to caller with success message and alternative Id.
-      console.log(result);
-      res.status(201).json({
-        message: "Alternative added",
-        alternativeId: result.insertedId,
+    // Send request to database to get alternative document created in database
+    db.getDb()
+      .db()
+      .collection("alternatives")
+      .insertOne(newAlternative)
+      .then((result) => {
+        // Successfully created alternative in database. Respond to caller with success message and alternative Id.
+        console.log(result);
+        res.status(201).json({
+          message: "Alternative added",
+          alternativeId: result.insertedId,
+        });
+      })
+      .catch((err) => {
+        // Encountered error creating a alternative. Responding to caller with server alternative error code.
+        console.log(err);
+        res.status(500).json({ message: "An error occurred." });
       });
-    })
-    .catch((err) => {
-      // Encountered error creating a alternative. Responding to caller with server alternative error code.
-      console.log(err);
-      res.status(500).json({ message: "An error occurred." });
-    });
+  }
 });
 
 /**

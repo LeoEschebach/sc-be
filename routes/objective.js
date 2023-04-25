@@ -103,35 +103,35 @@ router.post("", (req, res, next) => {
   // Ensure that fields are proper
   if (!req.body.decisionId) {
     res.status(400).json({ message: "decisionId not provided" });
+  } else {
+    // Creating object to be used to create objective in database
+    console.log(req.body);
+    const newObjective = {
+      title: req.body.title,
+      description: req.body.description,
+      decisionId: req.body.decisionId,
+      createdAt: new Date(),
+    };
+    console.log(newObjective);
+
+    // Send request to database to get objective document created in database
+    db.getDb()
+      .db()
+      .collection("objectives")
+      .insertOne(newObjective)
+      .then((result) => {
+        // Successfully created objective in database. Respond to caller with success message and objective Id.
+        console.log(result);
+        res
+          .status(201)
+          .json({ message: "Objective added", objectiveId: result.insertedId });
+      })
+      .catch((err) => {
+        // Encountered error creating a objective. Responding to caller with server objective error code.
+        console.log(err);
+        res.status(500).json({ message: "An error occurred." });
+      });
   }
-
-  // Creating object to be used to create objective in database
-  console.log(req.body);
-  const newObjective = {
-    title: req.body.title,
-    description: req.body.description,
-    decisionId: req.body.decisionId,
-    createdAt: new Date(),
-  };
-  console.log(newObjective);
-
-  // Send request to database to get objective document created in database
-  db.getDb()
-    .db()
-    .collection("objectives")
-    .insertOne(newObjective)
-    .then((result) => {
-      // Successfully created objective in database. Respond to caller with success message and objective Id.
-      console.log(result);
-      res
-        .status(201)
-        .json({ message: "Objective added", objectiveId: result.insertedId });
-    })
-    .catch((err) => {
-      // Encountered error creating a objective. Responding to caller with server objective error code.
-      console.log(err);
-      res.status(500).json({ message: "An error occurred." });
-    });
 });
 
 /**

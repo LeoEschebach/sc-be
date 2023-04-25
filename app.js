@@ -2,6 +2,7 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const decisionRoutes = require("./routes/decision");
 const problemRoutes = require("./routes/problem");
@@ -14,6 +15,7 @@ const db = require("./db");
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use("/images", express.static(path.join("backend/images")));
 
@@ -40,6 +42,8 @@ db.initDb((err, db) => {
   if (err) {
     console.log(err);
   } else {
-    app.listen(3100);
+    app.listen(3100, function () {
+      console.log("CORS-enabled web server listening on port 3100");
+    });
   }
 });

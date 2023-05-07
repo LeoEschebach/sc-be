@@ -112,7 +112,7 @@ router.post("", (req, res, next) => {
       description: req.body.description,
       impact: req.body.impact,
       probability: req.body.probability,
-      decisionId: req.body.decisionId,
+      decisionId: new ObjectId(req.body.decisionId),
       createdAt: new Date(),
     };
     console.log(newRisk);
@@ -149,6 +149,8 @@ router.patch("/:id", (req, res, next) => {
     description: req.body.description,
     impact: req.body.impact,
     probability: req.body.probability,
+    decisionId: new ObjectId(req.body.decisionId),
+    updatedAt: new Date(),
   };
 
   // Send request to database to get risk document updated in database

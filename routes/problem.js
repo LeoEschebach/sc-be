@@ -145,12 +145,13 @@ router.post("", (req, res, next) => {
     const newProblem = {
       title: req.body.title,
       description: req.body.description,
-      decisionId: req.body.decisionId,
+      decisionId: new ObjectId(req.body.decisionId),
       createdAt: new Date(),
     };
-    console.log(newProblem);
 
     // Send request to database to get problem document created in database
+    console.log("Request to create problem in DB");
+    console.log(newProblem);
     db.getDb()
       .db()
       .collection("problems")
@@ -180,11 +181,13 @@ router.patch("/:id", (req, res, next) => {
   const updatedProblem = {
     title: req.body.title,
     description: req.body.description,
-    decisionId: req.body.decisionId,
+    decisionId: new ObjectId(req.body.decisionId),
     updatedAt: new Date(),
   };
 
   // Send request to database to get problem document updated in database
+  console.log("Request to update problem in DB: " + req.params.id);
+  console.log(updatedProblem);
   db.getDb()
     .db()
     .collection("problems")

@@ -13,21 +13,24 @@ const objectives = [
     title: "Become financially independent through my career",
     description:
       "It is not quite clear to me what kind of costs I will encounter later in my life. My education provides me the means to get a job that pays sufficiently so that I can handle even bigger expenses throughout my life.",
-    decision: new ObjectId("6409d056bad5bc13ba316b51"),
+    decisionId: new ObjectId("6409d056bad5bc13ba316b51"),
+    problemId: new ObjectId("64262636271b8e43385ac04b"),
   },
   {
     title:
       "Be satisfied with the work I end up doing applying knowledge I acquired during my education",
     description:
       "Once I have my education, I want to apply it at work. That work must be fulfilling. I don't want to drag myself through each work day!",
-    decision: new ObjectId("6409d056bad5bc13ba316b51"),
+    decisionId: new ObjectId("6409d056bad5bc13ba316b51"),
+    problemId: new ObjectId("64262636271b8e43385ac04b"),
   },
   {
     title:
       "Have a sufficient number of job opportunities even if the job markets get tough",
     description:
       "When the job market gets tough, those with the least qualifications are let go earlier than those with better ones. I want to be among the ones who are indispensable at my job.",
-    decision: new ObjectId("6409d056bad5bc13ba316b51"),
+    decisionId: new ObjectId("6409d056bad5bc13ba316b51"),
+    problemId: new ObjectId("64262636271b8e43385ac04b"),
   },
 ];
 
@@ -109,7 +112,8 @@ router.post("", (req, res, next) => {
     const newObjective = {
       title: req.body.title,
       description: req.body.description,
-      decisionId: req.body.decisionId,
+      decisionId: new ObjectId(req.body.decisionId),
+      problemId: new ObjectId(req.body.problemId),
       createdAt: new Date(),
     };
     console.log(newObjective);
@@ -144,7 +148,8 @@ router.patch("/:id", (req, res, next) => {
   const updatedObjective = {
     title: req.body.title,
     description: req.body.description,
-    decisionId: req.body.decisionId,
+    decisionId: new ObjectId(req.body.decisionId),
+    problemId: new ObjectId(req.body.problemId),
     updatedAt: new Date(),
   };
 

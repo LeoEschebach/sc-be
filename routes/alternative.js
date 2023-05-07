@@ -22,6 +22,16 @@ router.get("/", (req, res, next) => {
   }
   console.log(" filter: " + JSON.stringify(filterForDecisionId));
 
+  // // Filter alternative
+  // const alternativeId = req.query.alternativeId;
+  // console.log(`Query parameter alternativeId: ${alternativeId}`);
+  // let filterForAlternativeId = {};
+  // if (alternativeId) {
+  //   // Compose filter for alternative id
+  //   filterForAlternativeId = { alternativeId: [alternativeId] };
+  // }
+  // console.log(" filter: " + JSON.stringify(filterForAlternativeId));
+
   // Request all alternatives from database
   console.log("Get alternatives");
   const alternatives = [];
@@ -81,19 +91,21 @@ router.post("", (req, res, next) => {
     const newAlternative = {
       title: req.body.title,
       description: req.body.description,
-      decisionId: req.body.decisionId,
+      decisionId: new ObjectId(req.body.decisionId),
+      consequences: req.body.consequences,
       createdAt: new Date(),
     };
-    console.log(newAlternative);
 
     // Send request to database to get alternative document created in database
+    console.log("Request to create alternative in DB");
+    console.log(newAlternative);
     db.getDb()
       .db()
       .collection("alternatives")
       .insertOne(newAlternative)
       .then((result) => {
         // Successfully created alternative in database. Respond to caller with success message and alternative Id.
-        console.log(result);
+        console.log(`Created alternative in DB: ${JSON.stringify(result)}`);
         res.status(201).json({
           message: "Alternative added",
           alternativeId: result.insertedId,
@@ -117,10 +129,14 @@ router.patch("/:id", (req, res, next) => {
   const updatedAlternative = {
     title: req.body.title,
     description: req.body.description,
+    consequences: req.body.consequences,
+    decisionId: new ObjectId(req.body.decisionId),
     updatedAt: new Date(),
   };
 
   // Send request to database to get alternative document updated in database
+  console.log("Request to update alternative in DB: " + req.params.id);
+  console.log(updatedAlternative);
   db.getDb()
     .db()
     .collection("alternatives")
@@ -132,6 +148,7 @@ router.patch("/:id", (req, res, next) => {
     )
     .then((result) => {
       // Successfully updated alternative in database. Respond to caller with success message and alternative Id.
+      console.log(`Updated alternative in DB: ${JSON.stringify(result)}`);
       res
         .status(200)
         .json({ message: "Alternative updated", alternativeId: req.params.id });

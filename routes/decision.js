@@ -114,6 +114,7 @@ router.post("", (req, res, next) => {
     title: req.body.title,
     description: req.body.description,
     userId: req.body.userId,
+    status: req.body.status,
     createdAt: new Date(),
   };
   console.log(newDecision);
@@ -142,6 +143,7 @@ router.patch("/:id", (req, res, next) => {
     title: req.body.title,
     description: req.body.description,
     userId: req.body.userId,
+    status: req.body.status,
     updatedAt: new Date(),
   };
   console.log(`Updated decision: ${JSON.stringify(updatedDecision, null, 2)}`);

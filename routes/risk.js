@@ -48,7 +48,7 @@ router.get("/", (req, res, next) => {
   let filterForDecisionId = {};
   if (decisionId) {
     // Compose filter for decision id
-    filterForDecisionId = { decisionId: decisionId };
+    filterForDecisionId = { decisionId: new ObjectId(decisionId) };
   }
   console.log(" filter: " + JSON.stringify(filterForDecisionId));
 

@@ -110,11 +110,40 @@ router.get("/:id", (req, res, next) => {
 router.post("", (req, res, next) => {
   console.log(req.body);
 
+  // Process request here
+  let status,
+    statusProblem,
+    statusObjectives,
+    statusAlternatives,
+    statusConsequences,
+    statusRisks;
+  req.body.status ? (status = req.body.status) : (status = "Not started");
+  req.body.statusProblem
+    ? (statusProblem = req.body.statusProblem)
+    : (statusProblem = "Not started");
+  req.body.statusObjectives
+    ? (statusObjectives = req.body.statusObjectives)
+    : (statusObjectives = "Not started");
+  req.body.statusAlternatives
+    ? (statusAlternatives = req.body.statusAlternatives)
+    : (statusAlternatives = "Not started");
+  req.body.statusConsequences
+    ? (statusConsequences = req.body.statusConsequences)
+    : (statusConsequences = "Not started");
+  req.body.statusRisks
+    ? (statusRisks = req.body.statusRisks)
+    : (statusRisks = "Not started");
+
   const newDecision = {
     title: req.body.title,
     description: req.body.description,
     userId: req.body.userId,
-    status: req.body.status,
+    status: status,
+    statusProblem: statusProblem,
+    statusObjectives: statusObjectives,
+    statusAlternatives: statusAlternatives,
+    statusConsequences: statusConsequences,
+    statusRisks: statusRisks,
     createdAt: new Date(),
   };
   console.log(newDecision);
@@ -139,14 +168,43 @@ router.post("", (req, res, next) => {
  * Edit existing decision. Requires logged in user.
  */
 router.patch("/:id", (req, res, next) => {
+  // Process request here
+  let status,
+    statusProblem,
+    statusObjectives,
+    statusAlternatives,
+    statusConsequences,
+    statusRisks;
+  req.body.status ? (status = req.body.status) : (status = "Not started");
+  req.body.statusProblem
+    ? (statusProblem = req.body.statusProblem)
+    : (statusProblem = "Not started");
+  req.body.statusObjectives
+    ? (statusObjectives = req.body.statusObjectives)
+    : (statusObjectives = "Not started");
+  req.body.statusAlternatives
+    ? (statusAlternatives = req.body.statusAlternatives)
+    : (statusAlternatives = "Not started");
+  req.body.statusConsequences
+    ? (statusConsequences = req.body.statusConsequences)
+    : (statusConsequences = "Not started");
+  req.body.statusRisks
+    ? (statusRisks = req.body.statusRisks)
+    : (statusRisks = "Not started");
+
   const updatedDecision = {
     title: req.body.title,
     description: req.body.description,
     userId: req.body.userId,
-    status: req.body.status,
+    status: status,
+    statusProblem: statusProblem,
+    statusObjectives: statusObjectives,
+    statusAlternatives: statusAlternatives,
+    statusConsequences: statusConsequences,
+    statusRisks: statusRisks,
     updatedAt: new Date(),
   };
-  console.log(`Updated decision: ${JSON.stringify(updatedDecision, null, 2)}`);
+  console.log(`Update decision: ${JSON.stringify(updatedDecision, null, 2)}`);
   db.getDb()
     .db()
     .collection("decisions")
@@ -157,6 +215,7 @@ router.patch("/:id", (req, res, next) => {
       }
     )
     .then((result) => {
+      console.log(result);
       res
         .status(200)
         .json({ message: "Decision updated", decisionId: req.params.id });

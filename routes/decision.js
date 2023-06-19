@@ -14,7 +14,7 @@ const decisions = [
     title: "Going to college or not?",
     description:
       "Not sure whether I should go to college or rather start working right away",
-    status: "Not started",
+    status: "Not Started",
   },
   {
     _id: "fasdlk1j2",
@@ -117,22 +117,22 @@ router.post("", (req, res, next) => {
     statusAlternatives,
     statusConsequences,
     statusRisks;
-  req.body.status ? (status = req.body.status) : (status = "Not started");
+  req.body.status ? (status = req.body.status) : (status = "Not Started");
   req.body.statusProblem
     ? (statusProblem = req.body.statusProblem)
-    : (statusProblem = "Not started");
+    : (statusProblem = "Not Started");
   req.body.statusObjectives
     ? (statusObjectives = req.body.statusObjectives)
-    : (statusObjectives = "Not started");
+    : (statusObjectives = "Not Started");
   req.body.statusAlternatives
     ? (statusAlternatives = req.body.statusAlternatives)
-    : (statusAlternatives = "Not started");
+    : (statusAlternatives = "Not Started");
   req.body.statusConsequences
     ? (statusConsequences = req.body.statusConsequences)
-    : (statusConsequences = "Not started");
+    : (statusConsequences = "Not Started");
   req.body.statusRisks
     ? (statusRisks = req.body.statusRisks)
-    : (statusRisks = "Not started");
+    : (statusRisks = "Not Started");
 
   const newDecision = {
     title: req.body.title,
@@ -175,22 +175,22 @@ router.patch("/:id", (req, res, next) => {
     statusAlternatives,
     statusConsequences,
     statusRisks;
-  req.body.status ? (status = req.body.status) : (status = "Not started");
+  req.body.status ? (status = req.body.status) : (status = "Not Started");
   req.body.statusProblem
     ? (statusProblem = req.body.statusProblem)
-    : (statusProblem = "Not started");
+    : (statusProblem = "Not Started");
   req.body.statusObjectives
     ? (statusObjectives = req.body.statusObjectives)
-    : (statusObjectives = "Not started");
+    : (statusObjectives = "Not Started");
   req.body.statusAlternatives
     ? (statusAlternatives = req.body.statusAlternatives)
-    : (statusAlternatives = "Not started");
+    : (statusAlternatives = "Not Started");
   req.body.statusConsequences
     ? (statusConsequences = req.body.statusConsequences)
-    : (statusConsequences = "Not started");
+    : (statusConsequences = "Not Started");
   req.body.statusRisks
     ? (statusRisks = req.body.statusRisks)
-    : (statusRisks = "Not started");
+    : (statusRisks = "Not Started");
 
   const updatedDecision = {
     title: req.body.title,
